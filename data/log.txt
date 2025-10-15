@@ -1,0 +1,2 @@
+[LOG] - [2025-10-15 15:21:16] - 192.168.65.1 - From Celsius to Fahrenheit - 1,00 - 33,80
+[LOG] - [2025-10-15 15:25:54] - 192.168.65.1 - From fahrenheit to celsius - 9 - -12.78
