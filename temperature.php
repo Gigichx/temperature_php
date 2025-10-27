@@ -1,24 +1,19 @@
 <?php
 
-// Percorso del file di log già creato dall'utente
 $logFile = __DIR__ . '/data/log.txt';
 
-// Inizializza variabili per il messaggio finale
 $resultMessage = null;
 $errorMessage = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recupera i dati inviati dal form
     $fromScale = isset($_POST['from_scale']) ? trim($_POST['from_scale']) : '';
     $toScale = isset($_POST['to_scale']) ? trim($_POST['to_scale']) : '';
     $rawValue = isset($_POST['temperature_value']) ? trim($_POST['temperature_value']) : '';
 
-    // Convalida scale ammesse
     $validScales = ['celsius', 'fahrenheit', 'kelvin'];
     $isFromValid = in_array($fromScale, $validScales, true);
     $isToValid = in_array($toScale, $validScales, true);
 
-    // Convalida valore numerico
     $value = filter_var($rawValue, FILTER_VALIDATE_FLOAT);
 
     if (!$isFromValid || !$isToValid) {
@@ -26,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($value === false) {
         $errorMessage = 'Inserisci un valore numerico valido.';
     } else {
-        // Conversione semplice: normalizza in Celsius
         switch ($fromScale) {
             case 'celsius':
                 $celsius = $value;
@@ -41,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $celsius = $value;
         }
 
-        // Converte dalla scala Celsius a quella scelta
         switch ($toScale) {
             case 'celsius':
                 $converted = $celsius;
@@ -56,10 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $converted = $celsius;
         }
 
-        // Messaggio da mostrare all'utente
         $resultMessage = "Da {$fromScale} a {$toScale}: {$value} → " . round($converted, 2);
 
-        // Costruisce il log
         $timestamp = date('Y-m-d H:i:s');
         $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $logLine = "[LOG] - [{$timestamp}] - {$ipAddress} - From {$fromScale} to {$toScale} - {$value} - " . round($converted, 2);
